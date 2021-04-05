@@ -1,7 +1,10 @@
 using GameBoardAuction.Data;
 using GameBoardAuction.Entities;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,10 +28,6 @@ namespace GameBoardAuction
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages();
-            services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
-
             services.AddDbContext<GameBoardAuctionContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
@@ -38,6 +37,15 @@ namespace GameBoardAuction
                     options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug().AddConsole())).EnableSensitiveDataLogging();
                 }
             });
+
+            services.AddDbContext<GameBoardAuctionIdentityContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<GameBoardAuctionIdentityContext>();
+
+            services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
+
+            services.AddRazorPages();
+            services.AddServerSideBlazor();
+            services.AddSingleton<WeatherForecastService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,8 +67,12 @@ namespace GameBoardAuction
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });

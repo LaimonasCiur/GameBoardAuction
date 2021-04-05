@@ -1,7 +1,6 @@
 ﻿using GameBoardAuction.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace GameBoardAuction.Entities
 {
     public class GameBoardAuctionContext : DbContext
