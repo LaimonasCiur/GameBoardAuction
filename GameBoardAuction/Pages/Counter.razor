@@ -1,16 +1,47 @@
 ﻿@page "/counter"
+@inject IJSRuntime JsRuntime;
+@*@attribute [Authorize]*@
 
-<h1>Counter</h1>
+<AuthorizeView>
+    <Authorized>
+        <h1>Counter</h1>
+        <h2>@Username</h2>
+        <p>Current count: @currentCount</p>
 
-<p>Current count: @currentCount</p>
+        <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+        @code {
+            private int currentCount = 0;
 
-@code {
-    private int currentCount = 0;
+            private void IncrementCount()
+            {
+                currentCount++;
+            }
+        }
+    </Authorized>
+    <NotAuthorized>
+        <h1>Sorry, you can't see it</h1>
+    </NotAuthorized>
+</AuthorizeView>
 
-    private void IncrementCount()
+@code
+{
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthStateTask { get; set; }
+    private string Username { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        currentCount++;
+        if (firstRender)
+        {
+            var authState = await AuthStateTask;
+
+            var user = authState.User;
+
+            Username = user.Identity.Name;
+
+            //await JsRuntime.InvokeVoidAsync("setElementTextById", "username", $"My name is: {username}");
+        }
     }
 }
+

@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBoardAuction", "GameBoardAuction\GameBoardAuction.csproj", "{8E174669-046E-4B8F-B74D-18FE33032666}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameBoardAuction.Entities", "GameBoardAuction.Entities\GameBoardAuction.Entities.csproj", "{29CB82EF-D51B-4888-932F-3E6EB2CA5369}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBoardAuction.Entities", "GameBoardAuction.Entities\GameBoardAuction.Entities.csproj", "{29CB82EF-D51B-4888-932F-3E6EB2CA5369}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
