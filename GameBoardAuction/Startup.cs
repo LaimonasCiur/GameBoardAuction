@@ -34,12 +34,18 @@ namespace GameBoardAuction
 
                 if (Env.IsDevelopment())
                 {
-                    options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug().AddConsole())).EnableSensitiveDataLogging();
+                    options.UseLoggerFactory(LoggerFactory.Create(builder => builder
+                    .AddDebug()
+                    .AddConsole()))
+                    .EnableSensitiveDataLogging();
                 }
             });
 
-            services.AddDbContext<GameBoardAuctionIdentityContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<GameBoardAuctionIdentityContext>();
+            services.AddDbContext<GameBoardAuctionIdentityContext>(options => options.UseSqlServer(Configuration
+                .GetConnectionString("DefaultConnection")));
+
+            services.AddDefaultIdentity<IdentityUser>()
+                .AddEntityFrameworkStores<GameBoardAuctionIdentityContext>();
 
             services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
 
