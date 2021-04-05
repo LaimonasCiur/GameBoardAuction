@@ -7,6 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBoardAuction", "GameBoa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameBoardAuction.Entities", "GameBoardAuction.Entities\GameBoardAuction.Entities.csproj", "{29CB82EF-D51B-4888-932F-3E6EB2CA5369}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameBoardAuction.Repositories", "GameBoardAuction.Repositories\GameBoardAuction.Repositories.csproj", "{8BF06E9F-2BFE-417E-A754-ED798600AE8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameBoardAuction.Common", "GameBoardAuction.Common\GameBoardAuction.Common.csproj", "{F571C73E-8BF8-4F1D-AD02-2B500EDA9E48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameBoardAuction.Services", "GameBoardAuction.Services\GameBoardAuction.Services.csproj", "{A5C62918-5950-4BCB-ABE5-B4F3131EC293}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +27,18 @@ Global
 		{29CB82EF-D51B-4888-932F-3E6EB2CA5369}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29CB82EF-D51B-4888-932F-3E6EB2CA5369}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29CB82EF-D51B-4888-932F-3E6EB2CA5369}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BF06E9F-2BFE-417E-A754-ED798600AE8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BF06E9F-2BFE-417E-A754-ED798600AE8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BF06E9F-2BFE-417E-A754-ED798600AE8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BF06E9F-2BFE-417E-A754-ED798600AE8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F571C73E-8BF8-4F1D-AD02-2B500EDA9E48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F571C73E-8BF8-4F1D-AD02-2B500EDA9E48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F571C73E-8BF8-4F1D-AD02-2B500EDA9E48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F571C73E-8BF8-4F1D-AD02-2B500EDA9E48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5C62918-5950-4BCB-ABE5-B4F3131EC293}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5C62918-5950-4BCB-ABE5-B4F3131EC293}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5C62918-5950-4BCB-ABE5-B4F3131EC293}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5C62918-5950-4BCB-ABE5-B4F3131EC293}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
