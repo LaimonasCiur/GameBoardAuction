@@ -1,5 +1,9 @@
 using GameBoardAuction.Data;
 using GameBoardAuction.Entities;
+using GameBoardAuction.Repositories.Base;
+using GameBoardAuction.Repositories.Base.Contracts;
+using GameBoardAuction.Repositories.Repositories;
+using GameBoardAuction.Repositories.Repositories.Contracts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
@@ -52,6 +56,10 @@ namespace GameBoardAuction
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
+
+            //Repositories
+            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            services.AddScoped<IAuctionRepository, AuctionRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

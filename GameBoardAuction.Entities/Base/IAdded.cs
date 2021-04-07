@@ -4,7 +4,7 @@ namespace GameBoardAuction.Entities.Base
 {
     interface IAdded
     {
-        int? AddedBy { get; set; }
+        string AddedBy { get; set; }
         DateTime? AddedDate { get; set; }
     }
 }

@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GameBoardAuction.Common\GameBoardAuction.Common.csproj" />
+  </ItemGroup>
+
 </Project>
