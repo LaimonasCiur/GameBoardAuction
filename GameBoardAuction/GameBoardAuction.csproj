@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GameBoardAuction.Entities\GameBoardAuction.Entities.csproj" />
+    <ProjectReference Include="..\GameBoardAuction.Repositories\GameBoardAuction.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

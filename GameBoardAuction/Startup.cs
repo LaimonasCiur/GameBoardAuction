@@ -58,7 +58,7 @@ namespace GameBoardAuction
             services.AddSingleton<WeatherForecastService>();
 
             //Repositories
-            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            //services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IAuctionRepository, AuctionRepository>();
         }
 
