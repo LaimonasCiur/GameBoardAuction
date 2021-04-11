@@ -1,9 +1,12 @@
+using GameBoardAuction.Common.Configuration;
 using GameBoardAuction.Data;
 using GameBoardAuction.Entities;
 using GameBoardAuction.Repositories.Base;
 using GameBoardAuction.Repositories.Base.Contracts;
 using GameBoardAuction.Repositories.Repositories;
 using GameBoardAuction.Repositories.Repositories.Contracts;
+using GameBoardAuction.Services.Contracts;
+using GameBoardAuction.Services.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
@@ -14,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace GameBoardAuction
 {
@@ -45,6 +49,9 @@ namespace GameBoardAuction
                 }
             });
 
+            services.Configure<ConfigurationSettings>(Configuration);
+            services.AddTransient(s => s.GetService<IOptions<ConfigurationSettings>>().Value);
+
             services.AddDbContext<GameBoardAuctionIdentityContext>(options => options.UseSqlServer(Configuration
                 .GetConnectionString("DefaultConnection")));
 
@@ -60,6 +67,8 @@ namespace GameBoardAuction
             //Repositories
             //services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IAuctionRepository, AuctionRepository>();
+            services.AddScoped<IAuctionService, AuctionService>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

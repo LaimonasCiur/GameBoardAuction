@@ -1,0 +1,63 @@
+﻿@page "/addAuction"
+@inject IJSRuntime JSRuntime
+@inject IAuctionService AuctionService
+
+<AuthorizeView>
+    <Authorized Context="Auth">
+        <div class="container d-flex justify-content-center text-center">
+            <div class="card px-5 py-5">
+                <h1>Add new Auction!</h1>
+                <EditForm Model="@details" OnValidSubmit="@CreateAuction">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="row">
+                        <div class="col-md-12">
+                            @*<label for="name">Auction Name</label>*@
+                            <InputText id="name" @bind-Value="@details.Name" class="form-control" placeholder="What is the name of the Auction?"></InputText>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="buyNowPrice">Buy Now Price</label>
+                            <InputNumber id="buyNowPrice" @bind-Value="@details.BuyNowPrice" class="form-control"></InputNumber>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="activeDate">Active Date</label>
+                            <InputDate id="activeDate" @bind-Value="@details.ActiveDate" class="form-control"></InputDate>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                                @*<label for="desc">Auction Description</label>*@
+                                <InputTextArea id="desc" @bind-Value="@details.Description" class="form-control" placeholder="Please describe your product"></InputTextArea>
+                        </div>
+                    </div>
+                    <button class="btn btn-success mt-5" type="submit"><i class="fa fa-long-arrow-right ml-2 mt-1"></i>Create New Auction!</button>
+                </EditForm>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <h1>Only logged in user can create new auctions! Please login or register new account</h1>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+
+<div>
+    <span id="resultJson">
+
+    </span>
+</div>
+
+@code
+{
+    private AuctionDetails details = new AuctionDetails();
+
+    private async Task CreateAuction()
+    {
+        _ = await AuctionService.AddAuctionWithAttachments(details);
+
+        await JSRuntime.InvokeVoidAsync("setElementTextById", "resultJson", JsonSerializer.Serialize(details));
+    }
+}

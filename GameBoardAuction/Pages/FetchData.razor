@@ -1,7 +1,7 @@
 ﻿@page "/fetchdata"
 
-@using GameBoardAuction.Data
 @inject WeatherForecastService ForecastService
+@inject IAuctionService AuctionService
 
 <h1>Weather forecast</h1>
 
@@ -42,5 +42,9 @@ else
     protected override async Task OnInitializedAsync()
     {
         forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+
+        //var a = AuctionService.AddAuction(new Common.Models.AuctionDetails(), "noName");
     }
+
+
 }

@@ -20,8 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GameBoardAuction.Common\GameBoardAuction.Common.csproj" />
     <ProjectReference Include="..\GameBoardAuction.Entities\GameBoardAuction.Entities.csproj" />
     <ProjectReference Include="..\GameBoardAuction.Repositories\GameBoardAuction.Repositories.csproj" />
+    <ProjectReference Include="..\GameBoardAuction.Services\GameBoardAuction.Services.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GameBoardAuction.Common\GameBoardAuction.Common.csproj" />
+    <ProjectReference Include="..\GameBoardAuction.Repositories\GameBoardAuction.Repositories.csproj" />
   </ItemGroup>
 
 </Project>
