@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BlazorInputFile" Version="0.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GameBoardAuction.Common\GameBoardAuction.Common.csproj" />
     <ProjectReference Include="..\GameBoardAuction.Entities\GameBoardAuction.Entities.csproj" />
   </ItemGroup>

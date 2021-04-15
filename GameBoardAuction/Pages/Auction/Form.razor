@@ -12,11 +12,10 @@
                     <ValidationSummary />
                     <div class="row">
                         <div class="col-md-12">
-                            @*<label for="name">Auction Name</label>*@
                             <InputText id="name" @bind-Value="@details.Name" class="form-control" placeholder="What is the name of the Auction?"></InputText>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row p-3">
                         <div class="col-md-6">
                             <label for="buyNowPrice">Buy Now Price</label>
                             <InputNumber id="buyNowPrice" @bind-Value="@details.BuyNowPrice" class="form-control"></InputNumber>
@@ -26,10 +25,44 @@
                             <InputDate id="activeDate" @bind-Value="@details.ActiveDate" class="form-control"></InputDate>
                         </div>
                     </div>
+
+                    <div class="row p-3">
+                        <div class="col-md-6">
+                            <label for="startingPrice">Starting Price</label>
+                            <InputNumber id="startingPrice" @bind-Value="@details.StartingPrice" class="form-control"></InputNumber>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="minBidPrice">Minimum Bid Price</label>
+                            <InputNumber id="minBidPrice" @bind-Value="@details.MinBidPrice" class="form-control"></InputNumber>
+                        </div>
+                    </div>
+
                     <div class="row mt-3">
                         <div class="col-md-12">
-                                @*<label for="desc">Auction Description</label>*@
-                                <InputTextArea id="desc" @bind-Value="@details.Description" class="form-control" placeholder="Please describe your product"></InputTextArea>
+                            <label for="uploadFiles" class="btn btn-success">Select File(s)</label>
+                            <InputFile id="uploadFiles"  style="display:none;" multiple OnChange="HandleSelectedFile" />
+                        </div>
+                    </div>
+
+                    @if (selectedFiles != null)
+                    {
+                        foreach (var file in selectedFiles)
+                        {
+                            var isLoading = file.Data.Position > 0;
+
+                            <div class="file-row">
+                                <!-- File info -->
+                                <div class="col-md-12">
+                                    <p>@file.Name</p>
+                                    Type: <strong>@file.Type</strong>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <InputTextArea id="desc" @bind-Value="@details.Description" class="form-control" placeholder="Please describe your product"></InputTextArea>
                         </div>
                     </div>
                     <button class="btn btn-success mt-5" type="submit"><i class="fa fa-long-arrow-right ml-2 mt-1"></i>Create New Auction!</button>
@@ -50,14 +83,33 @@
     </span>
 </div>
 
+
 @code
 {
     private AuctionDetails details = new AuctionDetails();
 
+    private IFileListEntry[] selectedFiles;
+
     private async Task CreateAuction()
     {
-        _ = await AuctionService.AddAuctionWithAttachments(details);
+        _ = await AuctionService.AddAuctionWithAttachments(details, selectedFiles);
 
         await JSRuntime.InvokeVoidAsync("setElementTextById", "resultJson", JsonSerializer.Serialize(details));
+    }
+
+    void HandleSelectedFile(IFileListEntry[] files)
+    {
+        selectedFiles = files;
+    }
+
+    async Task LoadFile(IFileListEntry file)
+    {
+        // So the UI updates to show progress
+        file.OnDataRead += (sender, eventArgs) => InvokeAsync(StateHasChanged);
+
+        // Just load into .NET memory to show it can be done
+        // Alternatively it could be saved to disk, or parsed in memory, or similar
+        var ms = new MemoryStream();
+        await file.Data.CopyToAsync(ms);
     }
 }

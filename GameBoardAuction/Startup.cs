@@ -62,13 +62,14 @@ namespace GameBoardAuction
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
 
             //Repositories
             //services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IAuctionRepository, AuctionRepository>();
+
             services.AddScoped<IAuctionService, AuctionService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAttachmentService, AttachmentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -10,6 +10,6 @@ namespace GameBoardAuction.Repositories.Repositories.Contracts
     {
         Task<Auction> GetId(int id);
         Task<IEnumerable<Auction>> GetAuctions();
-        Task<Auction> AddAuction(Auction detials, string addedBy);
+        Task<Auction> AddAuction(Auction entity, string addedBy);
     }
 }

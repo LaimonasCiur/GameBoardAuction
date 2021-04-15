@@ -12,8 +12,17 @@ namespace GameBoardAuction.Common.Models
         [StringLength(500, ErrorMessage = "Description is too long!")]
         public string Description { get; set; }
         [Required]
-        [Range(0.01, 99999, ErrorMessage = "Price cannot be lower than 0.01 or bigger than 99999")]
+        [Range(0.01, 99999, ErrorMessage = "Buy now price cannot be lower than 0.01 or bigger than 99999")]
         public decimal BuyNowPrice { get; set; }
+
+        [Required]
+        [Range(0.01, 99999, ErrorMessage = "Starting price cannot be lower than 0.01 or bigger than 99999")]
+        public decimal StartingPrice { get; set; }
+
+        [Required]
+        [Range(0.01, 99999, ErrorMessage = "Minimum bid price cannot be lower than 0.01 or bigger than 99999")]
+        public decimal MinBidPrice { get; set; }
+
         [Required]
         public DateTime ActiveDate { get; set; }
 
@@ -24,6 +33,8 @@ namespace GameBoardAuction.Common.Models
                 Name = details.Name,
                 Description = details.Description,
                 BuyNowPrice = details.BuyNowPrice,
+                MinBidPrice = details.MinBidPrice,
+                StartingPrice = details.StartingPrice,
                 ActiveDate = details.ActiveDate
             };
         }

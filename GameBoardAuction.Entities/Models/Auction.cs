@@ -8,10 +8,11 @@ namespace GameBoardAuction.Entities.Models
         public int Id { get; set; }
         public string AddedBy { get; set; }
         public DateTime? AddedDate { get; set; }
-
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal BuyNowPrice { get; set; }
+        public decimal StartingPrice { get; set; }
+        public decimal MinBidPrice { get; set; }
         public DateTime ActiveDate { get; set; }
     }
 }
