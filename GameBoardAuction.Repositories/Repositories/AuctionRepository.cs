@@ -5,6 +5,7 @@ using GameBoardAuction.Repositories.Base;
 using GameBoardAuction.Repositories.Repositories.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GameBoardAuction.Repositories.Repositories
@@ -13,22 +14,22 @@ namespace GameBoardAuction.Repositories.Repositories
     {
         public AuctionRepository(GameBoardAuctionContext context) : base(context) { }
 
-        public Task<Auction> AddAuction(Auction entity, string addedBy)
+        public async Task<Auction> AddAuction(Auction entity, string addedBy)
         {
             entity.AddedBy = addedBy;
             entity.AddedDate = DateTime.UtcNow;
 
-            return Add(entity);
+            return await Add(entity);
         }
 
-        public Task<IEnumerable<Auction>> GetAuctions()
+        public List<Auction> GetAuctions()
         {
-            throw new NotImplementedException();
+            return _context.Auctions.ToList();
         }
 
-        public Task<Auction> GetId(int id)
+        public ValueTask<Auction> GetById(int id)
         {
-            throw new NotImplementedException();
+            return _context.Auctions.FindAsync(id);
         }
     }
 }

@@ -3,6 +3,7 @@ using GameBoardAuction.Entities.Base;
 using GameBoardAuction.Repositories.Base.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GameBoardAuction.Repositories.Base
@@ -18,7 +19,7 @@ namespace GameBoardAuction.Repositories.Base
 
         public async Task<TEntity> Add(TEntity entity)
         {
-            if(entity == null)
+            if (entity == null)
                 throw new ArgumentNullException($"{nameof(Add)} entity must not be null");
 
             try

@@ -6,6 +6,8 @@ namespace GameBoardAuction.Common.Models
 {
     public class AuctionDetails
     {
+        public int Id { get; set; }
+
         [Required]
         public string Name { get; set; }
         [Required]
@@ -26,6 +28,8 @@ namespace GameBoardAuction.Common.Models
         [Required]
         public DateTime ActiveDate { get; set; }
 
+        public DateTime CreatedDate { get; set; }
+
         public static Auction FormAuction(AuctionDetails details)
         {
             return new Auction
@@ -38,5 +42,23 @@ namespace GameBoardAuction.Common.Models
                 ActiveDate = details.ActiveDate
             };
         }
+
+        public static AuctionDetails FormAuctionDetails(Auction entity)
+        {
+            return new AuctionDetails
+            {
+                Name = entity.Name,
+                Description = entity.Description,
+                ActiveDate = entity.ActiveDate,
+                BuyNowPrice = entity.BuyNowPrice,
+                MinBidPrice = entity.MinBidPrice,
+                StartingPrice = entity.StartingPrice,
+                CreatedDate = entity.AddedDate.Value,
+                Id = entity.Id
+            };
+        }
+
+        public bool IsValidPrice() => BuyNowPrice > StartingPrice && BuyNowPrice > StartingPrice;
+        public bool IsValidDate() => ActiveDate > DateTime.Now;
     }
 }

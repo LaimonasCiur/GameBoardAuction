@@ -1,6 +1,7 @@
 ﻿@page "/addAuction"
 @inject IJSRuntime JSRuntime
 @inject IAuctionService AuctionService
+@inject NavigationManager NavigationManager
 
 <AuthorizeView>
     <Authorized Context="Auth">
@@ -21,7 +22,7 @@
                             <InputNumber id="buyNowPrice" @bind-Value="@details.BuyNowPrice" class="form-control"></InputNumber>
                         </div>
                         <div class="col-md-6">
-                            <label for="activeDate">Active Date</label>
+                            <label for="activeDate">Active Till</label>
                             <InputDate id="activeDate" @bind-Value="@details.ActiveDate" class="form-control"></InputDate>
                         </div>
                     </div>
@@ -39,8 +40,9 @@
 
                     <div class="row mt-3">
                         <div class="col-md-12">
+                            <span id="isValid" style="color:red"></span>
                             <label for="uploadFiles" class="btn btn-success">Select File(s)</label>
-                            <InputFile id="uploadFiles"  style="display:none;" multiple OnChange="HandleSelectedFile" />
+                            <InputFile id="uploadFiles" style="display:none;" multiple OnChange="HandleSelectedFile" />
                         </div>
                     </div>
 
@@ -51,7 +53,6 @@
                             var isLoading = file.Data.Position > 0;
 
                             <div class="file-row">
-                                <!-- File info -->
                                 <div class="col-md-12">
                                     <p>@file.Name</p>
                                     Type: <strong>@file.Type</strong>
@@ -67,6 +68,7 @@
                     </div>
                     <button class="btn btn-success mt-5" type="submit"><i class="fa fa-long-arrow-right ml-2 mt-1"></i>Create New Auction!</button>
                 </EditForm>
+                <span id="valid" style="color:green"></span>
             </div>
         </div>
     </Authorized>
@@ -74,14 +76,6 @@
         <h1>Only logged in user can create new auctions! Please login or register new account</h1>
     </NotAuthorized>
 </AuthorizeView>
-
-
-
-<div>
-    <span id="resultJson">
-
-    </span>
-</div>
 
 
 @code
@@ -92,24 +86,33 @@
 
     private async Task CreateAuction()
     {
+        if (!details.IsValidDate())
+        {
+            await JSRuntime.InvokeVoidAsync("setElementTextById", "isValid", "Date is invalid!!!");
+            return;
+        }
+
+        if (!details.IsValidPrice())
+        {
+            await JSRuntime.InvokeVoidAsync("setElementTextById", "isValid", "Buy now price cannot be lower than Starting price or Minimum Bid!!!");
+            return;
+        }
+
         _ = await AuctionService.AddAuctionWithAttachments(details, selectedFiles);
 
-        await JSRuntime.InvokeVoidAsync("setElementTextById", "resultJson", JsonSerializer.Serialize(details));
+        await JSRuntime.InvokeVoidAsync("setElementTextById", "valid", "Auction has been created!!!");
     }
 
-    void HandleSelectedFile(IFileListEntry[] files)
+    private async Task HandleSelectedFile(IFileListEntry[] files)
     {
+        bool isValidFormat = files.Any(file => file.Type.Contains("js") || file.Type.Contains("exe"));
+
+        if (!isValidFormat)
+        {
+            await JSRuntime.InvokeVoidAsync("setElementTextById", "isValid", "Provided file format is not acceptable!!!");
+            return;
+        }
+
         selectedFiles = files;
-    }
-
-    async Task LoadFile(IFileListEntry file)
-    {
-        // So the UI updates to show progress
-        file.OnDataRead += (sender, eventArgs) => InvokeAsync(StateHasChanged);
-
-        // Just load into .NET memory to show it can be done
-        // Alternatively it could be saved to disk, or parsed in memory, or similar
-        var ms = new MemoryStream();
-        await file.Data.CopyToAsync(ms);
     }
 }

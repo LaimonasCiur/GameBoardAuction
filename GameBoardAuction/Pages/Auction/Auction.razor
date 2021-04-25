@@ -1,0 +1,41 @@
+﻿@page "/auction/{AuctionId:int}"
+
+@inject IAuctionService AuctionService;
+
+<section id="plans">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="panel panel-success panel-pricing">
+                    <div class="panel-heading">
+                        <i class="fa fa-desktop"></i>
+                        <h3>@Details.Name</h3>
+                    </div>
+                    <div class="panel-body text-center">
+                        <p><strong>@Details.Description</strong></p>
+                    </div>
+                    <ul class="list-group text-center">
+                        <li class="list-group-item p-3"><i class="fa fa-check"></i> Starting Price: @Details.StartingPrice EUR</li>
+                        <li class="list-group-item p-3"><i class="fa fa-check"></i> Minimum Bid Price: @Details.MinBidPrice EUR</li>
+                    </ul>
+                    <div class="panel-footer">
+                        <a class="btn btn-lg btn-block btn-success" href="#">BUY NOW! @Details.BuyNowPrice EUR</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@code
+{
+    [Parameter]
+    public int AuctionId { get; set; }
+
+    private AuctionDetails Details;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Details = await AuctionService.GetAuctionById(AuctionId);
+    }
+}
