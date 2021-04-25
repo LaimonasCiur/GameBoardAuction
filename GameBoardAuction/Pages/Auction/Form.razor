@@ -98,7 +98,7 @@
             return;
         }
 
-        _ = await AuctionService.AddAuctionWithAttachments(details, selectedFiles);
+        await AuctionService.AddAuctionWithAttachments(details, selectedFiles);
 
         await JSRuntime.InvokeVoidAsync("setElementTextById", "valid", "Auction has been created!!!");
     }

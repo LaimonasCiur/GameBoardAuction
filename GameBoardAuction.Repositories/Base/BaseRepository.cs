@@ -3,7 +3,6 @@ using GameBoardAuction.Entities.Base;
 using GameBoardAuction.Repositories.Base.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace GameBoardAuction.Repositories.Base

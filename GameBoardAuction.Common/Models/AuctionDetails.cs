@@ -1,6 +1,8 @@
 ﻿using GameBoardAuction.Entities.Models;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace GameBoardAuction.Common.Models
 {
@@ -30,6 +32,8 @@ namespace GameBoardAuction.Common.Models
 
         public DateTime CreatedDate { get; set; }
 
+        public IEnumerable<AuctionBetDetails> AuctionBets { get; set; }
+
         public static Auction FormAuction(AuctionDetails details)
         {
             return new Auction
@@ -47,14 +51,30 @@ namespace GameBoardAuction.Common.Models
         {
             return new AuctionDetails
             {
+                Id = entity.Id,
                 Name = entity.Name,
                 Description = entity.Description,
                 ActiveDate = entity.ActiveDate,
                 BuyNowPrice = entity.BuyNowPrice,
                 MinBidPrice = entity.MinBidPrice,
                 StartingPrice = entity.StartingPrice,
-                CreatedDate = entity.AddedDate.Value,
-                Id = entity.Id
+                CreatedDate = entity.AddedDate.Value
+            };
+        }
+
+        public static AuctionDetails FormAuctionDetailsWithBets(Auction auction, IEnumerable<AuctionBet> auctionBets)
+        {
+            return new AuctionDetails
+            {
+                Id = auction.Id,
+                Name = auction.Name,
+                Description = auction.Description,
+                ActiveDate = auction.ActiveDate,
+                BuyNowPrice = auction.BuyNowPrice,
+                MinBidPrice = auction.MinBidPrice,
+                StartingPrice = auction.StartingPrice,
+                CreatedDate = auction.AddedDate.Value,
+                AuctionBets = auctionBets.Select(bet => AuctionBetDetails.FormAuctionBetDetails(bet))
             };
         }
 

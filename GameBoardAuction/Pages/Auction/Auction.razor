@@ -1,6 +1,8 @@
 ﻿@page "/auction/{AuctionId:int}"
 
-@inject IAuctionService AuctionService;
+@inject IJSRuntime JSRuntime
+@inject IAuctionService AuctionService
+@inject IAuctionBetService AuctionBetServie
 
 <section id="plans">
     <div class="container">
@@ -9,18 +11,37 @@
                 <div class="panel panel-success panel-pricing">
                     <div class="panel-heading">
                         <i class="fa fa-desktop"></i>
-                        <h3>@Details.Name</h3>
+                        <h3>@auctionDetails.Name</h3>
                     </div>
                     <div class="panel-body text-center">
-                        <p><strong>@Details.Description</strong></p>
+                        <p><strong>@auctionDetails.Description</strong></p>
                     </div>
                     <ul class="list-group text-center">
-                        <li class="list-group-item p-3"><i class="fa fa-check"></i> Starting Price: @Details.StartingPrice EUR</li>
-                        <li class="list-group-item p-3"><i class="fa fa-check"></i> Minimum Bid Price: @Details.MinBidPrice EUR</li>
+                        <li class="list-group-item p-3" style="padding: 10rem"><i class="fa fa-check"></i> Starting Price: @auctionDetails.StartingPrice EUR</li>
+                        <li class="list-group-item p-3"><i class="fa fa-check"></i> Minimum Bet Price: @auctionDetails.MinBidPrice EUR</li>
+                        <li class="list-group-item p-3"><i class="fa fa-check"></i> Auction Time Left: @timeLeft.Duration().Days days @timeLeft.Duration().Hours hours @timeLeft.Duration().Minutes minutes</li>
+                        <li class="list-group-item p-3"><i class="fa fa-check"></i> Current Highest Bet: @auctionDetails.AuctionBets.OrderByDescending(bet => bet.BetValue).First().BetValue EUR</li>
                     </ul>
                     <div class="panel-footer">
-                        <a class="btn btn-lg btn-block btn-success" href="#">BUY NOW! @Details.BuyNowPrice EUR</a>
+                        <a class="btn btn-lg btn-block btn-success" href="#">BUY NOW! @auctionDetails.BuyNowPrice EUR</a>
                     </div>
+
+                    <EditForm Model="@betDetails" OnValidSubmit="@CreateAuctionBet">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <div class="row p-3">
+                            <div class="col-md-12">
+                                <div class="m-2">
+                                    <span id="bets" class="alert-dark font-weight-bold" style="font-size: 20px"></span>
+                                </div>
+                                <label for="betValue">Enter your bet value</label>
+                                <InputNumber id="betValue" @bind-Value="@betDetails.BetValue" class="form-control"></InputNumber>
+                                <span id="invalid" class="alert-danger font-weight-bold" style="font-size: 20px"></span>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-success mt-5" type="submit"><i class="fa fa-long-arrow-right ml-2 mt-1"></i>Submit your bet!</button>
+                    </EditForm>
                 </div>
             </div>
         </div>
@@ -32,10 +53,35 @@
     [Parameter]
     public int AuctionId { get; set; }
 
-    private AuctionDetails Details;
+    private AuctionDetails auctionDetails;
+    private AuctionBetDetails betDetails = new AuctionBetDetails();
+    private TimeSpan timeLeft;
 
     protected override async Task OnInitializedAsync()
     {
-        Details = await AuctionService.GetAuctionById(AuctionId);
+        auctionDetails = await AuctionService.GetAuctionById(AuctionId);
+
+        timeLeft = auctionDetails.ActiveDate.Subtract(DateTime.Now);
+    }
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        if (!auctionDetails.AuctionBets.Any())
+        {
+            await JSRuntime.InvokeVoidAsync("setElementTextById", "bets", "Currently there are no BETS");
+        }
+    }
+
+    private async Task CreateAuctionBet()
+    {
+        betDetails.AuctionId = auctionDetails.Id;
+
+        if (betDetails.BetValue < auctionDetails.MinBidPrice)
+        {
+            await JSRuntime.InvokeVoidAsync("setElementTextById", "invalid", "Your BET cannot be lower than miminum BET");
+            return;
+        }
+
+        await AuctionBetServie.AddAuctionBet(betDetails);
     }
 }

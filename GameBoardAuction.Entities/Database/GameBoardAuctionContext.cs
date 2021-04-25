@@ -7,6 +7,7 @@ namespace GameBoardAuction.Entities
     {
         public DbSet<Auction> Auctions { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
+        public DbSet<AuctionBet> AuctionBets { get; set; }
 
         public GameBoardAuctionContext(DbContextOptions<GameBoardAuctionContext> options) : base(options) { }
     }

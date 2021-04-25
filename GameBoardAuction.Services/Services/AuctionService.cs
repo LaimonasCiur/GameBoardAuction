@@ -12,17 +12,17 @@ namespace GameBoardAuction.Services.Services
     public class AuctionService : IAuctionService
     {
         private readonly IAuctionRepository _auctionRepository;
-        private readonly IAttachmentService _attachmentService;
         private readonly IUserService _userService;
+        private readonly IAuctionBetRepository _auctionBetRepository;
 
         public AuctionService(
             IAuctionRepository auctionRepository, 
             IUserService userService, 
-            IAttachmentService attachmentService)
+            IAuctionBetRepository auctionBetRepository)
         {
             _auctionRepository = auctionRepository;
             _userService = userService;
-            _attachmentService = attachmentService;
+            _auctionBetRepository = auctionBetRepository;
         }
 
         public async Task<Auction> AddAuctionWithAttachments(AuctionDetails details, IFileListEntry[] selectedFiles)
@@ -46,8 +46,9 @@ namespace GameBoardAuction.Services.Services
         public async Task<AuctionDetails> GetAuctionById(int id) 
         {
             var auction = await _auctionRepository.GetById(id);
+            var auctionBets = _auctionBetRepository.GetAuctionBetsById(id).ToList();
 
-            return AuctionDetails.FormAuctionDetails(auction);
+            return AuctionDetails.FormAuctionDetailsWithBets(auction, auctionBets);
         }
     }
 }

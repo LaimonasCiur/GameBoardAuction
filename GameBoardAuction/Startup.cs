@@ -66,10 +66,12 @@ namespace GameBoardAuction
             //Repositories
             //services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IAuctionRepository, AuctionRepository>();
+            services.AddScoped<IAuctionBetRepository, AuctionBetRepository>();
 
             services.AddScoped<IAuctionService, AuctionService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAttachmentService, AttachmentService>();
+            services.AddScoped<IAuctionBetService, AuctionBetService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

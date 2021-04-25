@@ -1,5 +1,4 @@
-﻿using GameBoardAuction.Common.Models;
-using GameBoardAuction.Entities;
+﻿using GameBoardAuction.Entities;
 using GameBoardAuction.Entities.Models;
 using GameBoardAuction.Repositories.Base;
 using GameBoardAuction.Repositories.Repositories.Contracts;
