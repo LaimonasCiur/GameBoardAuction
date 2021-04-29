@@ -3,6 +3,7 @@ using GameBoardAuction.Common.Models;
 using GameBoardAuction.Entities.Models;
 using GameBoardAuction.Repositories.Repositories.Contracts;
 using GameBoardAuction.Services.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,6 +50,19 @@ namespace GameBoardAuction.Services.Services
             var auctionBets = _auctionBetRepository.GetAuctionBetsById(id).ToList();
 
             return AuctionDetails.FormAuctionDetailsWithBets(auction, auctionBets);
+        }
+
+        public async Task<Auction> UpdateAuction(int id)
+        {
+            var auction = await _auctionRepository.GetById(id);
+            var userId = await  _userService.GetCurrentUserId();
+
+            auction.ActiveDate = new DateTime();
+            auction.BoughtNowBy = userId;
+
+            var updatedAuction = await _auctionRepository.Update(auction);
+
+            return updatedAuction;
         }
     }
 }

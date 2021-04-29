@@ -21,17 +21,17 @@ namespace GameBoardAuction.Repositories.Repositories
             return Add(entity);
         }
 
-        public IEnumerable<AuctionBet> GetAuctionBetsById(int id)
+        public IQueryable<AuctionBet> GetAuctionBetsById(int id)
         {
             return _context.AuctionBets
-                .Where(bet => bet.AuctionId == id);
+                .Where(bet => bet.AuctionId == id).AsQueryable();
         }
 
         public AuctionBet GetMaxAuctionBet(int id)
         {
             return _context.AuctionBets.Where(bet => bet.AuctionId == id)
                 .OrderByDescending(bet => bet.Value)
-                .First();
+                .FirstOrDefault();
         }
     }
 }

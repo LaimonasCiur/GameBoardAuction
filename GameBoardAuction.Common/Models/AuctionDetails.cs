@@ -47,6 +47,14 @@ namespace GameBoardAuction.Common.Models
             };
         }
 
+        public static Auction FormAuctionBoughtNow(AuctionDetails details, string userId) 
+        {
+            var auction = FormAuction(details);
+            auction.BoughtNowBy = userId;
+
+            return auction;
+        }
+
         public static AuctionDetails FormAuctionDetails(Auction entity)
         {
             return new AuctionDetails

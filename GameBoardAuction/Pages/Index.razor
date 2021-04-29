@@ -2,7 +2,7 @@
 
 @inject IAuctionService AuctionService
 
-<h1>Welcome to Game Board Auctions</h1>
+<h1 class="d-flex justify-content-center text-center alert-info">Welcome to Game Board Auctions</h1>
 
 <AuthorizeView>
     <Authorized>
@@ -17,7 +17,15 @@
                     <div class="col-12">
                         <div class="card px-5 py-5">
                             <div class="card-body text-center">
-                                <h1 class="card-title m-b-0">All available auctions!!!</h1>
+                                @if (@AuctionDetails.Any(auction => !((auction.ActiveDate.Subtract(DateTime.Now)).Ticks < 0)))
+                                {
+                                    <h1 class="card-title m-b-0 alert-success">All available auctions!!!</h1>
+                                }
+                                else
+                                {
+                                    <h1 class="card-title m-b-0 alert-warning">Currently there are no auctions available</h1>
+                                }
+
                             </div>
                             <div class="table-responsive">
                                 <table class="table">

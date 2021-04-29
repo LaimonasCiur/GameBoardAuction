@@ -14,5 +14,6 @@ namespace GameBoardAuction.Entities.Models
         public decimal StartingPrice { get; set; }
         public decimal MinBidPrice { get; set; }
         public DateTime ActiveDate { get; set; }
+        public string BoughtNowBy { get; set; }
     }
 }

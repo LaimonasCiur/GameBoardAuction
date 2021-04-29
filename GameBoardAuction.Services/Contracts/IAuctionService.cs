@@ -11,5 +11,6 @@ namespace GameBoardAuction.Services.Contracts
         Task<Auction> AddAuctionWithAttachments(AuctionDetails details, IFileListEntry[] selectedFiles);
         IEnumerable<AuctionDetails> GetAllAuctions();
         Task<AuctionDetails> GetAuctionById(int id);
+        Task<Auction> UpdateAuction(int id);
     }
 }
