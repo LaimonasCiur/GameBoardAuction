@@ -80,7 +80,9 @@
                                 @foreach (var auctionBetHistory in auctionBetsHistory)
                                 {
                                     <tr>
-                                        <td><a href="#">@auctionBetHistory.UserMail</a></td>
+                                        <td>
+                                        <NavLink href="@($"profile/{auctionBetHistory.UserId}")">@auctionBetHistory.UserMail</NavLink>
+                                        </td>
                                         <td>@auctionBetHistory.BetValue EUR</td>
                                         <td>@auctionBetHistory.AddedDate</td>
                                     </tr>
@@ -169,7 +171,7 @@
     {
         auctionDetails = await AuctionService.GetAuctionById(id);
 
-        auctionBetsHistory = AuctionBetService.GetAuctionBetHistories(id).ToList();
+        auctionBetsHistory = AuctionBetService.GetAuctionBetHistories(id);
 
         timeLeft = auctionDetails.ActiveDate.Subtract(DateTime.Now);
     }

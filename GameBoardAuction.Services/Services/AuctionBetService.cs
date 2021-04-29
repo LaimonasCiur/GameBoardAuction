@@ -34,7 +34,7 @@ namespace GameBoardAuction.Services.Services
             return auctionBet;
         }
 
-        public IEnumerable<AuctionBetHistory> GetAuctionBetHistories(int id)
+        public List<AuctionBetHistory> GetAuctionBetHistories(int id)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
@@ -44,15 +44,19 @@ namespace GameBoardAuction.Services.Services
 
                 var betsByAuction = _auctionBetRepository.GetAuctionBetsById(id);
 
-                return from user in users
-                       join bet in betsByAuction on user.Id equals bet.AddedBy
-                       orderby bet.AddedDate descending
-                       select new AuctionBetHistory
-                       {
-                           UserMail = user.Email,
-                           BetValue = bet.Value,
-                           AddedDate = bet.AddedDate.Value
-                       };
+                var result = from user in users
+                             join bet in betsByAuction on user.Id equals bet.AddedBy
+                             orderby bet.AddedDate descending
+                             select new AuctionBetHistory
+                             {
+                                 UserMail = user.Email,
+                                 BetValue = bet.Value,
+                                 AddedDate = bet.AddedDate.Value,
+                                 UserId = Guid.Parse(user.Id)
+                             };
+
+
+                return result.ToList();
             }
         }
     }

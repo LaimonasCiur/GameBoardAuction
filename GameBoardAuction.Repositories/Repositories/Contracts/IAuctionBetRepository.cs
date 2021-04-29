@@ -11,5 +11,6 @@ namespace GameBoardAuction.Repositories.Repositories.Contracts
         Task<AuctionBet> AddAuctionBet(AuctionBet entity, string addedBy);
         IQueryable<AuctionBet> GetAuctionBetsById(int id);
         AuctionBet GetMaxAuctionBet(int id);
+        IEnumerable<AuctionBet> GetBetsByUserId(string userId);
     }
 }

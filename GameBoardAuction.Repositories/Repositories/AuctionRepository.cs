@@ -21,6 +21,11 @@ namespace GameBoardAuction.Repositories.Repositories
             return await Add(entity);
         }
 
+        public IEnumerable<Auction> GetAuctionByUserId(string userId)
+        {
+            return _context.Auctions.Where(auction => auction.AddedBy.Equals(userId));
+        }
+
         public List<Auction> GetAuctions()
         {
             return _context.Auctions.ToList();

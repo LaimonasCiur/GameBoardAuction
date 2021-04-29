@@ -27,6 +27,11 @@ namespace GameBoardAuction.Repositories.Repositories
                 .Where(bet => bet.AuctionId == id).AsQueryable();
         }
 
+        public IEnumerable<AuctionBet> GetBetsByUserId(string userId)
+        {
+            return _context.AuctionBets.Where(bet => bet.AddedBy.Equals(userId));
+        }
+
         public AuctionBet GetMaxAuctionBet(int id)
         {
             return _context.AuctionBets.Where(bet => bet.AuctionId == id)

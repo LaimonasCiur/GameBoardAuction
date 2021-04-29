@@ -10,5 +10,6 @@ namespace GameBoardAuction.Repositories.Repositories.Contracts
         ValueTask<Auction> GetById(int id);
         List<Auction> GetAuctions();
         Task<Auction> AddAuction(Auction entity, string addedBy);
+        IEnumerable<Auction> GetAuctionByUserId(string userId);
     }
 }

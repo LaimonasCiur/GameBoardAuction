@@ -8,6 +8,6 @@ namespace GameBoardAuction.Services.Contracts
     public interface IAuctionBetService
     {
         Task<AuctionBet> AddAuctionBet(AuctionBetDetails details);
-        IEnumerable<AuctionBetHistory> GetAuctionBetHistories(int id);
+        List<AuctionBetHistory> GetAuctionBetHistories(int id);
     }
 }
