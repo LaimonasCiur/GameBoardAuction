@@ -14,9 +14,18 @@
         </li>
         <li class="nav-item px-3">
             <AuthorizeView>
-                <NavLink class="nav-link" href="addAuction">
-                    <span class="oi oi-plus" aria-hidden="true"></span> Create New Auction
-                </NavLink>
+                <Authorized>
+                    <NavLink class="nav-link" href="addAuction">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Create New Auction
+                    </NavLink>
+                </Authorized>
+            </AuthorizeView>
+            <AuthorizeView Roles="Admin">
+                <Authorized>
+                    <NavLink class="nav-link" href="unverifiedAuctions">
+                        <span class="oi oi-fork" aria-hidden="true"></span> Unverified Auctions
+                    </NavLink>
+                </Authorized>
             </AuthorizeView>
         </li>
     </ul>
@@ -30,5 +39,18 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthStateTask { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var state = await AuthStateTask;
+
+            var a = state.User;
+        }
     }
 }

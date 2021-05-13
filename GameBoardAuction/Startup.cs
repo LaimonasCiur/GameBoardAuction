@@ -1,8 +1,6 @@
 using GameBoardAuction.Common.Configuration;
 using GameBoardAuction.Data;
 using GameBoardAuction.Entities;
-using GameBoardAuction.Repositories.Base;
-using GameBoardAuction.Repositories.Base.Contracts;
 using GameBoardAuction.Repositories.Repositories;
 using GameBoardAuction.Repositories.Repositories.Contracts;
 using GameBoardAuction.Services.Contracts;
@@ -18,6 +16,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
+using System.Threading.Tasks;
 
 namespace GameBoardAuction
 {
@@ -56,6 +56,9 @@ namespace GameBoardAuction
                 .GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<IdentityUser>()
+                .AddRoles<IdentityRole>()
+                //.AddRoleManager<IdentityUser>()
+                //.AddUserManager<IdentityUser>()
                 .AddEntityFrameworkStores<GameBoardAuctionIdentityContext>();
 
             services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
@@ -75,7 +78,7 @@ namespace GameBoardAuction
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider services)
         {
             if (env.IsDevelopment())
             {
@@ -102,6 +105,25 @@ namespace GameBoardAuction
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+            CreateRoles(services).GetAwaiter().GetResult();
+        }
+
+        private async Task CreateRoles(IServiceProvider serviceProvider)
+        {
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+            IdentityResult adminRoleResult;
+            bool adminRoleExists = await RoleManager.RoleExistsAsync("Admin");
+
+            if (!adminRoleExists)
+            {
+                adminRoleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
+            }
+
+            IdentityUser userToMakeAdmin = await UserManager.FindByNameAsync("admin@test.com");
+            await UserManager.AddToRoleAsync(userToMakeAdmin, "Admin");
         }
     }
 }
