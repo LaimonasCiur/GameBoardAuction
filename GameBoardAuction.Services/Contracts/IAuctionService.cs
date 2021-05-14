@@ -12,5 +12,6 @@ namespace GameBoardAuction.Services.Contracts
         IEnumerable<AuctionDetails> GetAllAuctions();
         Task<AuctionDetails> GetAuctionById(int id);
         Task<Auction> UpdateAuction(int id);
+        Task<Auction> VerifyAuction(int id);
     }
 }

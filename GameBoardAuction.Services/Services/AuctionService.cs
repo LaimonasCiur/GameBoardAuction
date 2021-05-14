@@ -64,5 +64,16 @@ namespace GameBoardAuction.Services.Services
 
             return updatedAuction;
         }
+
+        public async Task<Auction> VerifyAuction(int id)
+        {
+            var auction = await _auctionRepository.GetById(id);
+
+            auction.IsVerified = true;
+
+            var verifiedAuction = await _auctionRepository.Update(auction);
+
+            return verifiedAuction;
+        }
     }
 }

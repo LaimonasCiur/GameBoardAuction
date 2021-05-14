@@ -2,8 +2,6 @@
 
 @inject IAuctionService AuctionService
 
-<h1 class="d-flex justify-content-center text-center alert-info">Welcome to Game Board Auctions</h1>
-
 <AuthorizeView>
     <Authorized>
         @if (AuctionDetails == null)
@@ -82,6 +80,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        AuctionDetails = AuctionService.GetAllAuctions();
+        AuctionDetails = AuctionService.GetAllAuctions().Where(auction => auction.IsVerified == true);
     }
 }

@@ -1,7 +1,97 @@
 ﻿@page  "/unverifiedAuctions"
 
-<h3>UnverifiedAuctions</h3>
+@inject IAuctionService AuctionService
+@inject IJSRuntime JSRuntime
 
-@code {
+<h1 class="d-flex justify-content-center text-center alert-info">Welcome to Game Board Auctions</h1>
 
+<AuthorizeView>
+    <Authorized>
+        @if (AuctionDetails == null)
+        {
+            <p><em>Loading.......</em></p>
+        }
+        else
+        {
+            <div class="container d-flex justify-content-center text-center">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card px-5 py-5">
+                            <div class="card-body text-center">
+                                @if (@AuctionDetails.Any(auction => !((auction.ActiveDate.Subtract(DateTime.Now)).Ticks < 0)))
+                                {
+                                    <h1 class="card-title m-b-0 alert-success">All unverified auctions</h1>
+
+                                }
+                                else
+                                {
+                                    <h1 class="card-title m-b-0 alert-warning">Currently there are no unverified auctions available</h1>
+                                }
+
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Buy Now Price</th>
+                                            <th scope="col">Time Left</th>
+                                            <th scope="col">Starting Price</th>
+                                            <th scope="col">Created</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="customtable">
+                                        @foreach (var auction in AuctionDetails)
+                                        {
+                                            var timeLeft = auction.ActiveDate.Subtract(DateTime.Now);
+
+                                            if (timeLeft.Ticks < 0)
+                                            {
+                                                continue;
+                                            }
+
+                                            <tr>
+                                                <td>@auction.Name</td>
+                                                <td>@auction.BuyNowPrice EUR</td>
+                                                <td>@timeLeft.Duration().Days days @timeLeft.Duration().Hours hours @timeLeft.Duration().Minutes minutes</td>
+                                                <td>@auction.StartingPrice EUR</td>
+                                                <td>@auction.CreatedDate </td>
+                                                <td>
+                                                    <a class="btn btn-lg btn-block btn-success" @onclick="() => VerifyAuction(auction.Id)">Verify Auction</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <span id="valid" class="alert-success font-weight-bold" style="font-size: 20px"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+    </Authorized>
+    <NotAuthorized>
+        <p>Please create new account or login with existing one.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code
+{
+
+    private IEnumerable<AuctionDetails> AuctionDetails;
+
+    protected override async Task OnInitializedAsync()
+    {
+        AuctionDetails = AuctionService.GetAllAuctions().Where(auction => auction.IsVerified == false);
+    }
+
+    private async Task VerifyAuction(int auctionId)
+    {
+        var auction = await AuctionService.VerifyAuction(auctionId);
+        await JSRuntime.InvokeVoidAsync("setElementTextById", "valid", $"Auction has been verified. Auction name: {auction.Name}");
+    }
 }

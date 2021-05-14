@@ -3,6 +3,7 @@
 @inject IJSRuntime JSRuntime
 @inject IAuctionService AuctionService
 @inject IAuctionBetService AuctionBetService
+@inject IUserService UserService;
 
 <section id="plans">
     <div class="container">
@@ -124,6 +125,21 @@
     private async Task CreateAuctionBet()
     {
         betDetails.AuctionId = auctionDetails.Id;
+
+        var currentUserId = await UserService.GetCurrentUserId();
+
+        if (currentUserId.Equals(auctionDetails.AddedBy))
+        {
+            await JSRuntime.InvokeVoidAsync("setElementTextById", "valid", "");
+            await JSRuntime.InvokeVoidAsync("setElementTextById", "invalid", "You CAN NOT bet for YOUR own auction");
+            return;
+        }
+
+        if (betDetails.BetValue > auctionDetails.BuyNowPrice)
+        {
+            await BuyNow();
+            return;
+        }
 
         if (betDetails.BetValue < auctionDetails.MinBidPrice)
         {

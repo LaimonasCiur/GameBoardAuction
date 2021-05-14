@@ -34,6 +34,10 @@ namespace GameBoardAuction.Common.Models
 
         public IEnumerable<AuctionBetDetails> AuctionBets { get; set; }
 
+        public string AddedBy { get; set; }
+
+        public bool IsVerified { get; set; }
+
         public static Auction FormAuction(AuctionDetails details)
         {
             return new Auction
@@ -66,7 +70,8 @@ namespace GameBoardAuction.Common.Models
                 BuyNowPrice = entity.BuyNowPrice,
                 MinBidPrice = entity.MinBidPrice,
                 StartingPrice = entity.StartingPrice,
-                CreatedDate = entity.AddedDate.Value
+                CreatedDate = entity.AddedDate.Value,
+                IsVerified = entity.IsVerified
             };
         }
 
@@ -82,6 +87,7 @@ namespace GameBoardAuction.Common.Models
                 MinBidPrice = auction.MinBidPrice,
                 StartingPrice = auction.StartingPrice,
                 CreatedDate = auction.AddedDate.Value,
+                AddedBy = auction.AddedBy,
                 AuctionBets = auctionBets.Select(bet => AuctionBetDetails.FormAuctionBetDetails(bet))
             };
         }
