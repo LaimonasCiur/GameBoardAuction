@@ -1,71 +1,32 @@
 ﻿@page "/profile/{UserId:guid}"
 
-@inject IUserService _userService;
+@inject IUserService _userService
+@inject IThreadService _threadService
 
-<div class="container justify-content-center">
-    <div class="well col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2 justify-content-center">
-        <div class="row user-row">
-        </div>
-        <div class="row user-infos cyruxx">
-            <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xs-offset-0 col-sm-offset-0 col-md-offset-1 col-lg-offset-1">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">User information</h3>
+<div class="container mt-lg-5 d-flex justify-content-center">
+    <div class="card p-3">
+        <div class="d-flex align-items-center">
+            <div class="image"> <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80" class="rounded" width="155"> </div>
+            <div class="ml-3 w-100">
+                <h4 class="mb-0 mt-0">@UserProfileDetails.UserEmail</h4>
+                <div class="p-2 mt-2 bg-success d-flex justify-content-between rounded text-white stats" style="width: 40rem">
+                    <div class="d-flex flex-column justify-content-center" style="width: 15rem"> <span class="articles">Total bets made</span> <span style="align-content:center">@UserProfileDetails.TotalMadeBets</span> </div>
+                    <div class="d-flex flex-column" style="width: 15rem;">
+                        <span class="followers">Created Auctions</span>
+                        @foreach (var auction in UserProfileDetails.Auctions)
+                        {
+                            <span>@auction.Name</span>
+                        }
                     </div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-3 col-lg-3 hidden-xs hidden-sm">
-                                <img class="img-circle"
-                                     src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=200"
-                                     alt="User Pic">
-                            </div>
-                            <div class=" col-md-9 col-lg-9" style="padding-left: 5rem">
-                                <table class="table table-user-information">
-                                    <tbody>
-                                        <tr>
-                                            <td>User Email</td>
-                                            <td class="font-weight-bold">@UserProfileDetails.UserEmail</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Registered since:</td>
-                                            <td class="font-weight-bold">11/12/2013</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Total bets made</td>
-                                            <td class="font-weight-bold">@UserProfileDetails.TotalMadeBets</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Auctions created:</td>
-                                            @foreach (var auction in UserProfileDetails.Auctions)
-                                            {
-                                                <td class="font-weight-bold">@auction.Name</td>
-                                            }
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel-footer">
-                        <button class="btn btn-sm btn-primary" type="button"
-                                data-toggle="tooltip"
-                                data-original-title="Send message to user">
-                            <i class="glyphicon glyphicon-envelope"></i>
-                        </button>
-                        <span class="pull-right">
-                            <button class="btn btn-sm btn-warning" type="button"
-                                    data-toggle="tooltip"
-                                    data-original-title="Edit this user">
-                                <i class="glyphicon glyphicon-edit"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger" type="button"
-                                    data-toggle="tooltip"
-                                    data-original-title="Remove this user">
-                                <i class="glyphicon glyphicon-remove"></i>
-                            </button>
-                        </span>
+                    <div class="d-flex flex-column" style="width: 15rem;">
+                        <span class="followers">My Threads</span>
+                        @foreach (var thread in ThreadsDetails)
+                        {
+                            <NavLink class="font-weight-bold" href="@($"thread/{thread.Id}")">@thread.Topic</NavLink>
+                        }
                     </div>
                 </div>
+                <div class="button mt-2 d-flex flex-row align-items-center"><NavLink class="nav-link" href="@($"message/{UserId}")"><button class="btn btn-sm btn-outline-success w-100">Sent New Message</button></NavLink>  </div>
             </div>
         </div>
     </div>
@@ -76,9 +37,11 @@
     public Guid UserId { get; set; }
 
     public UserProfileDetails UserProfileDetails { get; set; }
+    public List<ThreadDetails> ThreadsDetails { get; set; }
 
-    protected override void OnInitialized()
+    protected async override void OnInitialized()
     {
         UserProfileDetails = _userService.GetUserProfileDetails(UserId.ToString());
+        ThreadsDetails  = await _threadService.GetThreadsAndMessagesByUserId();
     }
 }

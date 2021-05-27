@@ -37,6 +37,23 @@ namespace GameBoardAuction.Services.Services
             return user.User.Claims.Single(claim => claim.Type.Equals(_config.IdentityServer.IdIdentifier)).Value;
         }
 
+        public async Task<string> GetCurrentUserEmail()
+        {
+            var user = await _authStateProvider.GetAuthenticationStateAsync();
+            return user.User.Claims.Single(claim => claim.Type.Equals(_config.IdentityServer.EmailIdentifier)).Value;
+        }
+
+        public string GetUserEmailById(string userId) 
+        {
+            using (var scope = _serviceProvider.CreateScope()) 
+            {
+                var identityContext = scope.ServiceProvider.GetRequiredService<GameBoardAuctionIdentityContext>();
+                var user = identityContext.Users.Single(user => user.Id.Equals(userId));
+
+                return user.Email;
+            }
+        }
+
         public UserProfileDetails GetUserProfileDetails(string userId)
         {
             using (var scope = _serviceProvider.CreateScope())

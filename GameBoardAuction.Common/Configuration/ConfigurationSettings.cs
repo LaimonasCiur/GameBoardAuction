@@ -7,6 +7,7 @@
         public class IdentityServerConfig 
         {
             public string IdIdentifier { get; set; }
+            public string EmailIdentifier { get; set; }
         }
     }
 }

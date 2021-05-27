@@ -4,14 +4,16 @@ using GameBoardAuction.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GameBoardAuction.Entities.Migrations
 {
     [DbContext(typeof(GameBoardAuctionContext))]
-    partial class GameBoardAuctionContextModelSnapshot : ModelSnapshot
+    [Migration("20210523193025_Thread_RecievedBy_IsRead_Fields")]
+    partial class Thread_RecievedBy_IsRead_Fields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,9 +153,6 @@ namespace GameBoardAuction.Entities.Migrations
 
                     b.Property<DateTime?>("AddedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
 
                     b.Property<string>("RecievedBy")
                         .HasColumnType("nvarchar(max)");

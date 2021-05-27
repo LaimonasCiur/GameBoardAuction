@@ -57,8 +57,6 @@ namespace GameBoardAuction
 
             services.AddDefaultIdentity<IdentityUser>()
                 .AddRoles<IdentityRole>()
-                //.AddRoleManager<IdentityUser>()
-                //.AddUserManager<IdentityUser>()
                 .AddEntityFrameworkStores<GameBoardAuctionIdentityContext>();
 
             services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
@@ -67,14 +65,17 @@ namespace GameBoardAuction
             services.AddServerSideBlazor();
 
             //Repositories
-            //services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+
             services.AddScoped<IAuctionRepository, AuctionRepository>();
             services.AddScoped<IAuctionBetRepository, AuctionBetRepository>();
+            services.AddScoped<IThreadRepository, ThreadRepository>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
 
             services.AddScoped<IAuctionService, AuctionService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAttachmentService, AttachmentService>();
             services.AddScoped<IAuctionBetService, AuctionBetService>();
+            services.AddScoped<IThreadService, ThreadService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

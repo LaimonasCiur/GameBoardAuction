@@ -1,4 +1,6 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
+﻿@inject IUserService UserService
+
+<div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">GameBoardAuction</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
@@ -18,6 +20,9 @@
                     <NavLink class="nav-link" href="addAuction">
                         <span class="oi oi-plus" aria-hidden="true"></span> Create New Auction
                     </NavLink>
+                    <NavLink class="nav-link" href="@($"profile/{UserId}")">
+                        <span class="oi oi-person" aria-hidden="true"></span> My Profile
+                    </NavLink>
                 </Authorized>
             </AuthorizeView>
             <AuthorizeView Roles="Admin">
@@ -33,6 +38,7 @@
 
 @code {
     private bool collapseNavMenu = true;
+    public string UserId { get; set; }
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
@@ -51,6 +57,16 @@
             var state = await AuthStateTask;
 
             var a = state.User;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await AuthStateTask;
+
+        if (state.User.Claims.Any())
+        {
+            UserId = await UserService.GetCurrentUserId();
         }
     }
 }

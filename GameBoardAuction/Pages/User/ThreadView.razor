@@ -1,0 +1,50 @@
+﻿@page "/thread/{ThreadId:int}"
+
+@inject IThreadService _threadService
+
+<EditForm Model="@message" OnValidSubmit="@AddMessageToThread">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="wrapper">
+        <div class="main">
+            <div class="px-2 scroll">
+                <div class="d-flex align-items-center">
+                    <div class="pr-2 pl-1">
+                        @foreach (var message in messages)
+                        {
+                            <span class="name">@message.AddedBy</span>
+                            <p class="msg">@message.Message</p>
+                        }
+                    </div>
+                </div>
+            </div>
+            <nav class="navbar bg-white navbar-expand-sm d-flex justify-content-between">
+                <InputTextArea @bind-Value="@message.Message" class="form-control" rows="5" id="content" placeholder="Type here"></InputTextArea>
+                <div class="icondiv d-flex justify-content-end align-content-center text-center ml-2"> <i class="fa fa-paperclip icon1"></i> <i class="fa fa-arrow-circle-right icon2"></i> </div>
+            </nav>
+        </div>
+    </div>
+    <button class="btn btn-success mt-3" type="submit"><i class="fa fa-long-arrow-right ml-2 mt-1"></i>Sent message!</button>
+</EditForm>
+
+
+
+@code {
+    [Parameter]
+    public int ThreadId { get; set; }
+
+    private MessageDetails message = new MessageDetails();
+
+    private List<MessageDetails> messages = new List<MessageDetails>();
+
+    private async Task AddMessageToThread()
+    {
+        await _threadService.AddMessageToThread(ThreadId, message);
+        messages = _threadService.GetMessagesByThreadId(ThreadId);
+    }
+
+    protected override void OnInitialized()
+    {
+        messages = _threadService.GetMessagesByThreadId(ThreadId);
+    }
+}
