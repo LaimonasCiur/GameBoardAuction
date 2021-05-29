@@ -6,7 +6,11 @@ namespace GameBoardAuction.Common.Models
 {
     public class MessageDetails
     {
+        [Required]
+        [StringLength(50, ErrorMessage = "Topic is too long!")]
         public string Topic { get; set; }
+        [Required]
+        [StringLength(500, ErrorMessage = "Message is too long!")]
         public string Message { get; set; }
         public Guid RecievedBy { get; set; }
         public string AddedBy { get; set; }

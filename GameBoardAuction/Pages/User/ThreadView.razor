@@ -33,13 +33,15 @@
     [Parameter]
     public int ThreadId { get; set; }
 
-    private MessageDetails message = new MessageDetails();
+    private MessageDTO message = new MessageDTO();
 
     private List<MessageDetails> messages = new List<MessageDetails>();
 
     private async Task AddMessageToThread()
     {
-        await _threadService.AddMessageToThread(ThreadId, message);
+        var mappedMessaged = new MessageDetails() {  Message = message.Message, AddedBy = message.AddedBy };
+
+        await _threadService.AddMessageToThread(ThreadId, mappedMessaged);
         messages = _threadService.GetMessagesByThreadId(ThreadId);
     }
 
